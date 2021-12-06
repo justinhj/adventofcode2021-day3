@@ -1,0 +1,9 @@
+[package]
+name = "adventofcode2021-day3"
+version = "0.1.0"
+authors = ["Justin Heyes-Jones <justinhj@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
