@@ -23,7 +23,7 @@ fn totals(words: &Vec<Vec<u8>>) -> Vec<u32> {
     words.iter().fold(counts,
         |mut acc,word| {
             for (i, digit) in word.iter().enumerate() {
-                acc[i] += (*digit - '0' as u8) as u32;
+                acc[i] += *digit as u32;
             }
             acc
         })
@@ -46,7 +46,10 @@ fn solve_part_1(input: &str) -> u32 {
 
     let words: Vec<Vec<u8>> = input
         .lines()
-        .map(|s| String::into_bytes(s.to_string()))
+        .map(|s| {
+            let bs = String::into_bytes(s.to_string());
+            bs.iter().map(|n| *n - '0' as u8).collect()    
+        })
         .collect();
     let half_num_words = words.len() / 2;
 
@@ -88,11 +91,14 @@ fn solve_part_2(input: &str) -> u32 {
 
     let words: Vec<Vec<u8>> = input
         .lines()
-        .map(|s| String::into_bytes(s.to_string()))
+        .map(|s| {
+            let bs = String::into_bytes(s.to_string());
+            bs.iter().map(|n| *n - '0' as u8).collect()    
+        })
         .collect();
     let half_num_words = words.len() / 2;
-    let word_length = words[0].len();
 
+    println!("words {:?}", words);
     println!("num words {:?}", words.len());
 
     let totals = totals(&words);
@@ -104,9 +110,9 @@ fn solve_part_2(input: &str) -> u32 {
     let winners: Vec<u8> = totals.iter().map (
         |total| {
             if *total as usize >= half_num_words {
-                '1' as u8
+                1
             } else {
-                '0' as u8
+                0
             }
         }
     ).collect();
@@ -118,9 +124,9 @@ fn solve_part_2(input: &str) -> u32 {
     // now eliminate non winners from each bit position until only word is left
     let mut candidates = words.clone();
 
-    for (bit, winner) in winners.iter().rev().enumerate() {
+    for (bit, winner) in winners.iter().enumerate() {
         candidates = filter_words(candidates, &winner, bit);
-        println!("{:?}", candidates);
+        println!("{:?} {:?} {:?}", candidates, bit, winner);
         if candidates.len() == 1 {
             break;
         }
